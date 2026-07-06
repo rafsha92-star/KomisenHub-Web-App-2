@@ -97,8 +97,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
       onClose();
     } catch (error: any) {
       console.error('Google Auth Error:', error);
-      if (error.code !== 'auth/popup-closed-by-user') {
-        setErrorMsg('Gagal menyambung ke Google. Sila cuba lagi.');
+      if (error.code === 'auth/popup-closed-by-user') {
+        setErrorMsg('Tetingkap log masuk Google ditutup sebelum selesai. Sekiranya ini berlaku secara automatik, pelayar web anda mungkin menyekat pop-up di dalam iframe. Sila gunakan daftar/masuk menggunakan E-mel di bawah atau buka aplikasi ini di tab baru (Open in new tab).');
+      } else if (error.code === 'auth/popup-blocked') {
+        setErrorMsg('Pop-up disekat oleh pelayar web anda. Sila benarkan pop-up untuk laman web ini, gunakan daftar/masuk menggunakan E-mel, atau buka aplikasi ini di tab baru.');
+      } else {
+        setErrorMsg('Gagal menyambung ke Google. Sila cuba lagi atau gunakan log masuk e-mel.');
       }
     } finally {
       setLoading(false);
