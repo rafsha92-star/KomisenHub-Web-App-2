@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile with role definition",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["owner", "affiliate"] },
+        "whatsapp": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "role", "createdAt", "updatedAt"]
+    },
+    "Offer": {
+      "title": "Commission Offer",
+      "description": "Commission offer created by a business owner",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "ownerName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "commissionAmount": { "type": "number" },
+        "commissionType": { "type": "string", "enum": ["percentage", "fixed"] },
+        "productUrl": { "type": "string" },
+        "promoMaterials": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string", "enum": ["aktif", "tamat"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "clicksCount": { "type": "number" },
+        "salesCount": { "type": "number" }
+      },
+      "required": ["id", "ownerId", "ownerName", "title", "description", "commissionAmount", "commissionType", "productUrl", "status", "createdAt", "updatedAt"]
+    },
+    "Promotion": {
+      "title": "Affiliate Promotion Link",
+      "description": "Affiliate linkage to a commission offer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "affiliateId": { "type": "string" },
+        "affiliateName": { "type": "string" },
+        "offerId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "referralCode": { "type": "string" },
+        "status": { "type": "string", "enum": ["diluluskan", "menunggu", "ditolak"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "clicks": { "type": "number" },
+        "conversions": { "type": "number" },
+        "earnedAmount": { "type": "number" }
+      },
+      "required": ["id", "affiliateId", "affiliateName", "offerId", "ownerId", "referralCode", "status", "createdAt", "updatedAt"]
+    },
+    "Claim": {
+      "title": "Commission Claim",
+      "description": "A claim submitted by an affiliate for earning a commission on a sale",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "affiliateId": { "type": "string" },
+        "affiliateName": { "type": "string" },
+        "offerId": { "type": "string" },
+        "offerTitle": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerEmail": { "type": "string", "format": "email" },
+        "saleAmount": { "type": "number" },
+        "commissionEarned": { "type": "number" },
+        "proof": { "type": "string" },
+        "notes": { "type": "string" },
+        "status": { "type": "string", "enum": ["menunggu", "diluluskan", "ditolak"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "affiliateId", "affiliateName", "offerId", "offerTitle", "ownerId", "customerName", "saleAmount", "commissionEarned", "status", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profile with role choice"
+    },
+    "offers/{offerId}": {
+      "schema": "Offer",
+      "description": "Commission offers created by owners"
+    },
+    "promotions/{promotionId}": {
+      "schema": "Promotion",
+      "description": "Affiliates promoting offers"
+    },
+    "claims/{claimId}": {
+      "schema": "Claim",
+      "description": "Commission claims for conversion approval"
+    }
+  }
+}
