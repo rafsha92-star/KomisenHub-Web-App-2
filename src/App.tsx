@@ -326,26 +326,30 @@ export default function App() {
     );
   }
 
+  const isDashboardActive = !!(profile && viewMode === 'dashboard');
+
   // --- STANDARD COMPONENT DISPLAY ---
   return (
-    <div className="min-h-screen bg-slate-50/50 flex flex-col justify-between" id="app-root">
-      <div>
-        {/* Top Header Navigation */}
-        <Header 
-          userProfile={profile} 
-          onLogin={handleLogin} 
-          onLogout={handleLogout} 
-          onToggleRole={handleToggleRole}
-          onGoHome={() => setViewMode('home')}
-        />
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-between" id="app-root">
+      <div className={isDashboardActive ? "flex-grow flex flex-col h-screen overflow-hidden" : "flex-grow"}>
+        {/* Top Header Navigation - Only on landing/home page */}
+        {!isDashboardActive && (
+          <Header 
+            userProfile={profile} 
+            onLogin={handleLogin} 
+            onLogout={handleLogout} 
+            onToggleRole={handleToggleRole}
+            onGoHome={() => setViewMode('home')}
+          />
+        )}
 
         {/* Core Content */}
-        <main>
-          {profile && viewMode === 'dashboard' ? (
+        <main className={isDashboardActive ? "flex-grow h-full overflow-hidden flex" : "flex-grow"}>
+          {isDashboardActive ? (
             profile.role === UserRole.OWNER ? (
-              <DashboardOwner userProfile={profile} onToggleRole={handleToggleRole} />
+              <DashboardOwner userProfile={profile} onToggleRole={handleToggleRole} onLogout={handleLogout} />
             ) : (
-              <DashboardAffiliate userProfile={profile} onToggleRole={handleToggleRole} />
+              <DashboardAffiliate userProfile={profile} onToggleRole={handleToggleRole} onLogout={handleLogout} />
             )
           ) : (
             <Hero 
@@ -357,8 +361,8 @@ export default function App() {
         </main>
       </div>
 
-      {/* Footer copyright */}
-      <Footer />
+      {/* Footer copyright - Only on landing/home page */}
+      {!isDashboardActive && <Footer />}
 
       {/* Auth Modal */}
       <AuthModal 

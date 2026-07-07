@@ -101,8 +101,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
         setErrorMsg('Tetingkap log masuk Google ditutup sebelum selesai. Sekiranya ini berlaku secara automatik, pelayar web anda mungkin menyekat pop-up di dalam iframe. Sila gunakan daftar/masuk menggunakan E-mel di bawah atau buka aplikasi ini di tab baru (Open in new tab).');
       } else if (error.code === 'auth/popup-blocked') {
         setErrorMsg('Pop-up disekat oleh pelayar web anda. Sila benarkan pop-up untuk laman web ini, gunakan daftar/masuk menggunakan E-mel, atau buka aplikasi ini di tab baru.');
+      } else if (error.code === 'auth/unauthorized-domain') {
+        setErrorMsg(`Domain ini (${window.location.hostname}) belum didaftarkan di Firebase Console. Sila tambah "${window.location.hostname}" ke dalam senarai "Authorized domains" di Firebase Console (Authentication > Settings > Authorized domains) untuk membenarkan log masuk di Netlify.`);
       } else {
-        setErrorMsg('Gagal menyambung ke Google. Sila cuba lagi atau gunakan log masuk e-mel.');
+        setErrorMsg(`Gagal menyambung ke Google (${error.code || error.message}). Sekiranya anda di Netlify, pastikan anda telah menambah domain "${window.location.hostname}" ke senarai Authorized Domains di Firebase Console.`);
       }
     } finally {
       setLoading(false);
