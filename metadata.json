@@ -1,5 +1,5 @@
 {
-  "name": "KomisenHub",
+  "name": "KomisyenHub",
   "description": "Marketplace menghubungkan pemilik perniagaan dengan ejen affiliate komisyen di Malaysia.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
