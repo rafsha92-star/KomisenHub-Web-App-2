@@ -146,7 +146,7 @@ export default function App() {
               userIsAdmin = true;
             }
           } catch (err) {
-            console.error('Error checking admin doc:', err);
+            console.warn('Note: Non-admin or error checking admin doc:', err);
           }
         }
         setIsAdmin(userIsAdmin);
@@ -173,6 +173,11 @@ export default function App() {
             setShowRoleSelection(false);
           } else {
             // No profile found, trigger first-time role selection
+            const tempWhatsapp = localStorage.getItem('temp_whatsapp');
+            if (tempWhatsapp) {
+              setWhatsapp(tempWhatsapp);
+              localStorage.removeItem('temp_whatsapp');
+            }
             setShowRoleSelection(true);
           }
         } catch (error) {
@@ -362,39 +367,6 @@ export default function App() {
                   </p>
                 </div>
               </div>
-            </div>
-
-            {/* Contact Details */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Smartphone className="w-4 h-4 text-slate-400" /> No. Telefon / WhatsApp (Sangat Disyorkan)
-                </label>
-                <input
-                  type="tel"
-                  placeholder="Contoh: +60123456789"
-                  value={whatsapp}
-                  onChange={(e) => setWhatsapp(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-slate-400" /> Username Telegram (Sangat Disyorkan)
-                </label>
-                <input
-                  type="text"
-                  placeholder="Contoh: @username_anda"
-                  value={telegram}
-                  onChange={(e) => setTelegram(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                />
-              </div>
-
-              <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
-                Maklumat perhubungan ini membolehkan pemilik perniagaan dan ejen affiliate berhubung secara langsung di luar platform untuk memulakan kerjasama, memandangkan tiada sistem tracking automatik.
-              </p>
             </div>
 
             <button

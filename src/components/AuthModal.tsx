@@ -12,7 +12,7 @@ import {
   GoogleAuthProvider 
 } from 'firebase/auth';
 import { auth } from '../firebase';
-import { X, Mail, Lock, User, AlertCircle, Loader2, Briefcase, Users as UsersIcon } from 'lucide-react';
+import { X, Mail, Lock, User, AlertCircle, Loader2, Briefcase, Users as UsersIcon, Smartphone } from 'lucide-react';
 import { UserRole } from '../types';
 
 interface AuthModalProps {
@@ -26,6 +26,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -43,8 +44,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
       return;
     }
 
+    if (isRegisterMode && !whatsapp.trim()) {
+      setErrorMsg('Sila masukkan no. telefon / WhatsApp anda.');
+      setLoading(false);
+      return;
+    }
+
     try {
       if (isRegisterMode) {
+        // Store whatsapp temporarily in localStorage so App.tsx can retrieve it when creating profile
+        localStorage.setItem('temp_whatsapp', whatsapp.trim());
+
         // Create user with email and password
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         // Update display name
@@ -59,7 +69,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
       }
       onClose(); // Close modal upon successful authentication
     } catch (error: any) {
-      console.error('Authentication error:', error);
+      console.warn('Authentication scenario:', error);
       // Friendly Melayu errors
       switch (error.code) {
         case 'auth/email-already-in-use':
@@ -79,6 +89,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
         case 'auth/popup-closed-by-user':
           setErrorMsg('Tetingkap log masuk Google ditutup sebelum selesai.');
           break;
+        case 'auth/operation-not-allowed':
+          setErrorMsg('Ralat: Kaedah daftar/masuk menggunakan E-mel & Kata Laluan tidak diaktifkan di Firebase Console anda. Sila pergi ke Firebase Console > Authentication > Sign-in method, aktifkan "Email/Password" untuk membenarkan pendaftaran ini.');
+          break;
         default:
           setErrorMsg(error.message || 'Ralat sistem berlaku. Sila cuba lagi.');
       }
@@ -96,13 +109,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
       await signInWithPopup(auth, provider);
       onClose();
     } catch (error: any) {
-      console.error('Google Auth Error:', error);
+      console.warn('Google Auth Error:', error);
       if (error.code === 'auth/popup-closed-by-user') {
         setErrorMsg('Tetingkap log masuk Google ditutup sebelum selesai. Sekiranya ini berlaku secara automatik, pelayar web anda mungkin menyekat pop-up di dalam iframe. Sila gunakan daftar/masuk menggunakan E-mel di bawah atau buka aplikasi ini di tab baru (Open in new tab).');
       } else if (error.code === 'auth/popup-blocked') {
         setErrorMsg('Pop-up disekat oleh pelayar web anda. Sila benarkan pop-up untuk laman web ini, gunakan daftar/masuk menggunakan E-mel, atau buka aplikasi ini di tab baru.');
       } else if (error.code === 'auth/unauthorized-domain') {
         setErrorMsg(`Domain ini (${window.location.hostname}) belum didaftarkan di Firebase Console. Sila tambah "${window.location.hostname}" ke dalam senarai "Authorized domains" di Firebase Console (Authentication > Settings > Authorized domains) untuk membenarkan log masuk di Netlify.`);
+      } else if (error.code === 'auth/operation-not-allowed') {
+        setErrorMsg('Ralat: Kaedah daftar/masuk menggunakan Google tidak diaktifkan di Firebase Console anda. Sila pergi ke Firebase Console > Authentication > Sign-in method, klik "Add new provider", pilih "Google", aktifkan dan simpan.');
       } else {
         setErrorMsg(`Gagal menyambung ke Google (${error.code || error.message}). Sekiranya anda di Netlify, pastikan anda telah menambah domain "${window.location.hostname}" ke senarai Authorized Domains di Firebase Console.`);
       }
@@ -222,6 +237,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
                 />
               </div>
             </div>
+
+            {/* No. Telefon / WhatsApp (Only for Registration) */}
+            {isRegisterMode && (
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  No. Telefon / WhatsApp *
+                </label>
+                <div className="relative">
+                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="tel"
+                    required
+                    placeholder="Contoh: +60123456789"
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Submit Button */}
             <button

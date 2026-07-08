@@ -51,6 +51,8 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
   const [productUrl, setProductUrl] = useState('');
   const [productImageUrl, setProductImageUrl] = useState('');
   const [contactInstructions, setContactInstructions] = useState('');
+  const [ownerWhatsapp, setOwnerWhatsapp] = useState('');
+  const [ownerEmail, setOwnerEmail] = useState('');
   const [submittingOffer, setSubmittingOffer] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -141,6 +143,8 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
     setProductUrl('');
     setProductImageUrl('');
     setContactInstructions('');
+    setOwnerWhatsapp(userProfile.whatsapp || '');
+    setOwnerEmail(userProfile.email || '');
     setErrorMsg('');
     setActiveSection('create_offer');
   };
@@ -156,6 +160,8 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
     setProductUrl(offer.productUrl);
     setProductImageUrl(offer.productImageUrl || '');
     setContactInstructions(offer.contactInstructions || '');
+    setOwnerWhatsapp(offer.ownerWhatsapp || '');
+    setOwnerEmail(offer.ownerEmail || offer.ownerEmail || '');
     setErrorMsg('');
     setActiveSection('create_offer');
   };
@@ -222,6 +228,8 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
           category,
           productImageUrl: productImageUrl || '',
           contactInstructions,
+          ownerWhatsapp: ownerWhatsapp || '',
+          ownerEmail: ownerEmail || '',
           updatedAt: serverTimestamp(),
         });
         setEditingOfferId(null);
@@ -229,8 +237,8 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
         const newOfferData = {
           ownerId: userProfile.uid,
           ownerName: userProfile.displayName,
-          ownerEmail: userProfile.email,
-          ownerWhatsapp: userProfile.whatsapp || '',
+          ownerEmail: ownerEmail || userProfile.email || '',
+          ownerWhatsapp: ownerWhatsapp || userProfile.whatsapp || '',
           ownerTelegram: userProfile.telegram || '',
           title,
           description,
@@ -253,6 +261,8 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
       setProductUrl('');
       setProductImageUrl('');
       setContactInstructions('');
+      setOwnerWhatsapp('');
+      setOwnerEmail('');
       setCommissionAmount(10);
       setCategory('Servis');
       setActiveSection('offers');
@@ -737,6 +747,43 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
                         </div>
                       )}
                       <p className="text-[9px] text-slate-400 leading-tight">Menyediakan imej produk meningkatkan pendedahan listing jualan anda.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hubungi Pemilik (WhatsApp & Email) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                      No. WhatsApp untuk Dihubungi *
+                    </label>
+                    <div className="relative">
+                      <Smartphone className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="text"
+                        required
+                        placeholder="Contoh: 60123456789"
+                        value={ownerWhatsapp}
+                        onChange={(e) => setOwnerWhatsapp(e.target.value)}
+                        className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                      Emel untuk Dihubungi *
+                    </label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="email"
+                        required
+                        placeholder="Contoh: pemilik@perniagaan.com"
+                        value={ownerEmail}
+                        onChange={(e) => setOwnerEmail(e.target.value)}
+                        className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                      />
                     </div>
                   </div>
                 </div>

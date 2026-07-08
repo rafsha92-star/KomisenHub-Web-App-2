@@ -994,12 +994,23 @@ export const DashboardAffiliate: React.FC<DashboardAffiliateProps> = ({ userProf
                                 <ExternalLink className="w-3.5 h-3.5" />
                               </a>
 
-                              <button
-                                onClick={() => setContactingOffer(offer)}
-                                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5"
-                              >
-                                Hubungi Pemilik Perniagaan
-                              </button>
+                              {offer.ownerWhatsapp ? (
+                                <a
+                                  href={getWhatsAppLink(offer)}
+                                  target="_blank"
+                                  referrerPolicy="no-referrer"
+                                  className="w-full inline-flex items-center justify-center py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs gap-1.5"
+                                >
+                                  Hubungi Pemilik Perniagaan
+                                </a>
+                              ) : (
+                                <button
+                                  onClick={() => setContactingOffer(offer)}
+                                  className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5"
+                                >
+                                  Hubungi Pemilik Perniagaan
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
