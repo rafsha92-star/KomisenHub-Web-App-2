@@ -29,6 +29,7 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { DashboardOwner } from './components/DashboardOwner';
 import { DashboardAffiliate } from './components/DashboardAffiliate';
+import { DashboardAdmin } from './components/DashboardAdmin';
 import { Footer } from './components/Footer';
 import { AuthModal } from './components/AuthModal';
 import { 
@@ -53,12 +54,103 @@ export default function App() {
   const [profileError, setProfileError] = useState('');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
+  // Admin Mode states
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Hidden admin access trigger
+  const handleAdminAccessTrigger = async () => {
+    if (isAdmin) {
+      setIsAdminMode(true);
+      return;
+    }
+
+    // Check if logged-in as admin email (rafsha92@gmail.com)
+    const email = auth.currentUser?.email?.toLowerCase();
+    if (email) {
+      if (email === 'rafsha92@gmail.com' || email === 'admin@komisyenhub.com' || email === 'admin@example.com') {
+        setIsAdmin(true);
+        setIsAdminMode(true);
+        return;
+      }
+
+      try {
+        const adminDoc = await getDoc(doc(db, 'admins', email));
+        if (adminDoc.exists()) {
+          setIsAdmin(true);
+          setIsAdminMode(true);
+          return;
+        }
+      } catch (err) {
+        console.error('Error checking admin doc:', err);
+      }
+    }
+    
+    // Otherwise ask for password to allow testing
+    const passcode = window.prompt('Masukkan Kata Laluan Pentadbir (Admin Passcode):');
+    if (passcode === 'admin123' || passcode === 'komisenhub2026') {
+      setIsAdmin(true);
+      setIsAdminMode(true);
+    } else if (passcode !== null) {
+      alert('Kata laluan salah.');
+      window.location.hash = '';
+    } else {
+      window.location.hash = '';
+    }
+  };
+
+  // Keyboard shortcut listener (Ctrl + Shift + A) & Hash listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        handleAdminAccessTrigger();
+      }
+    };
+
+    const handleHashChange = () => {
+      if (window.location.hash === '#admin') {
+        handleAdminAccessTrigger();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Initial check
+    if (window.location.hash === '#admin') {
+      handleAdminAccessTrigger();
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [user, isAdmin]);
+
   // Listen to Auth State
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       
       if (currentUser) {
+        // Check admin status
+        const email = currentUser.email?.toLowerCase();
+        let userIsAdmin = false;
+        if (email === 'rafsha92@gmail.com' || email === 'admin@komisyenhub.com' || email === 'admin@example.com') {
+          userIsAdmin = true;
+        } else if (email) {
+          try {
+            const adminDoc = await getDoc(doc(db, 'admins', email));
+            if (adminDoc.exists()) {
+              userIsAdmin = true;
+            }
+          } catch (err) {
+            console.error('Error checking admin doc:', err);
+          }
+        }
+        setIsAdmin(userIsAdmin);
+
         // User logged in, let's fetch profile
         const path = `users/${currentUser.uid}`;
         try {
@@ -89,6 +181,7 @@ export default function App() {
       } else {
         setProfile(null);
         setShowRoleSelection(false);
+        setIsAdmin(false);
       }
       setLoading(false);
     });
@@ -326,6 +419,18 @@ export default function App() {
     );
   }
 
+  if (isAdminMode) {
+    return (
+      <DashboardAdmin 
+        adminEmail={auth.currentUser?.email || 'admin@komisyenhub.com'} 
+        onExit={() => {
+          setIsAdminMode(false);
+          window.location.hash = '';
+        }} 
+      />
+    );
+  }
+
   const isDashboardActive = !!(profile && viewMode === 'dashboard');
 
   // --- STANDARD COMPONENT DISPLAY ---
@@ -340,6 +445,7 @@ export default function App() {
             onLogout={handleLogout} 
             onToggleRole={handleToggleRole}
             onGoHome={() => setViewMode('home')}
+            isAdmin={isAdmin}
           />
         )}
 

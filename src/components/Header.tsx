@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { LogOut, User, Briefcase, Users } from 'lucide-react';
+import { LogOut, User, Briefcase, Users, Shield } from 'lucide-react';
 import { UserProfile, UserRole } from '../types';
 
 interface HeaderProps {
@@ -13,9 +13,10 @@ interface HeaderProps {
   onLogout: () => void;
   onToggleRole?: () => void;
   onGoHome?: () => void;
+  isAdmin?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ userProfile, onLogin, onLogout, onToggleRole, onGoHome }) => {
+export const Header: React.FC<HeaderProps> = ({ userProfile, onLogin, onLogout, onToggleRole, onGoHome, isAdmin }) => {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200" id="komisenhub-header">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,7 +24,13 @@ export const Header: React.FC<HeaderProps> = ({ userProfile, onLogin, onLogout, 
           {/* Logo */}
           <div className="flex items-center space-x-6">
             <div 
-              onClick={onGoHome}
+              onClick={(e) => {
+                if (e.detail === 3) {
+                  window.location.hash = '#admin';
+                } else {
+                  onGoHome?.();
+                }
+              }}
               className="flex items-center space-x-3 cursor-pointer select-none hover:opacity-90 transition-opacity"
             >
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
@@ -104,6 +111,18 @@ export const Header: React.FC<HeaderProps> = ({ userProfile, onLogin, onLogout, 
                 <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600">
                   <User className="w-5 h-5" />
                 </div>
+
+                {/* Admin Button */}
+                {(userProfile.email === 'rafsha92@gmail.com' || isAdmin) && (
+                  <button
+                    onClick={() => window.location.hash = '#admin'}
+                    className="p-2 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors duration-200 border border-amber-200 bg-amber-50/50"
+                    title="Panel Pentadbir"
+                    id="btn-admin-panel"
+                  >
+                    <Shield className="w-5 h-5" />
+                  </button>
+                )}
 
                 {/* Logout Button */}
                 <button

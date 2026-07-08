@@ -9,7 +9,7 @@ import {
   Trash2, AlertCircle, FileText, Info, Loader2, Send, 
   ExternalLink, Smartphone, MessageCircle, Mail, Upload, Image as ImageIcon,
   Pencil, Users, Clock, Play, Pause, RotateCcw, LayoutDashboard, BarChart3, 
-  HelpCircle, Settings, LogOut, ChevronRight, CheckSquare, Square, Bell, User
+  HelpCircle, Settings, LogOut, ChevronRight, CheckSquare, Square, Bell, User, Shield, XCircle
 } from 'lucide-react';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { 
@@ -305,7 +305,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
   const activePercentage = offers.length > 0 ? Math.round((activeOffersCount / offers.length) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex" id="komisenhub-owner-dashboard-root">
+    <div className="min-h-screen w-full max-w-full overflow-hidden bg-slate-50 flex" id="komisenhub-owner-dashboard-root">
       
       {/* 1. LEFT SIDEBAR (Desktop: visible, Mobile: slide-over) */}
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200/80 p-5 flex flex-col justify-between transform transition-transform duration-300 md:translate-x-0 md:static ${
@@ -313,18 +313,36 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
       }`}>
         <div className="space-y-7">
           {/* Brand Header */}
-          <div className="flex items-center space-x-3 pb-2 border-b border-slate-100">
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-sm">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-              </svg>
+          <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+            <div 
+              onClick={(e) => {
+                if (e.detail === 3) {
+                  window.location.hash = '#admin';
+                }
+              }}
+              className="flex items-center space-x-3 cursor-pointer select-none"
+            >
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-sm">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+              </div>
+              <div>
+                <span className="text-lg font-extrabold tracking-tight text-slate-900 block">
+                  Komisen<span className="text-blue-600">Hub</span>
+                </span>
+                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Private Directory</span>
+              </div>
             </div>
-            <div>
-              <span className="text-lg font-extrabold tracking-tight text-slate-900 block">
-                Komisen<span className="text-blue-600">Hub</span>
-              </span>
-              <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Private Directory</span>
-            </div>
+
+            {/* Close Button for Mobile */}
+            <button
+              onClick={() => setMobileSidebarOpen(false)}
+              className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg md:hidden"
+              title="Tutup Menu"
+            >
+              <XCircle className="w-5 h-5" />
+            </button>
           </div>
 
           {/* User Profile Card */}
@@ -398,6 +416,17 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
                   >
                     <Users className="w-4 h-4 shrink-0" />
                     <span>Tukar ke Mod Ejen</span>
+                  </button>
+                )}
+
+                {/* Admin Button */}
+                {userProfile.email === 'rafsha92@gmail.com' && (
+                  <button
+                    onClick={() => window.location.hash = '#admin'}
+                    className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-bold text-amber-600 bg-amber-500/10 hover:bg-amber-500/20 transition-all border border-amber-200/50"
+                  >
+                    <Shield className="w-4 h-4 shrink-0" />
+                    <span>Urus Pengguna (Admin)</span>
                   </button>
                 )}
 
@@ -483,7 +512,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
               {onToggleRole && (
                 <button 
                   onClick={onToggleRole}
-                  className="bg-slate-50 border border-slate-200 hover:border-blue-300 text-slate-700 font-bold text-[10px] px-3 py-1.5 rounded-lg transition-all"
+                  className="bg-slate-50 border border-slate-200 hover:border-blue-300 text-slate-700 font-bold text-[10px] px-3 py-1.5 rounded-lg transition-all hidden sm:block"
                 >
                   Tukar Mod Ejen
                 </button>
