@@ -135,7 +135,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
           <div className="flex justify-between items-start">
             <div>
               <h3 className="text-lg font-sans font-bold text-slate-900">
-                {isRegisterMode ? 'Daftar Akaun Baru' : 'Log Masuk KomisenHub'}
+                {isRegisterMode ? 'Daftar Akaun Baru' : 'Log Masuk REFERRA'}
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
                 {isRegisterMode ? 'Sila isi maklumat anda di bawah.' : 'Selamat kembali ke portal anda.'}

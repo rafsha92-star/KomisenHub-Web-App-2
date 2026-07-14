@@ -233,7 +233,7 @@ export default function App() {
     try {
       const newProfile: UserProfile = {
         uid: user.uid,
-        displayName: user.displayName || 'Pengguna KomisenHub',
+        displayName: user.displayName || 'Pengguna REFERRA',
         email: user.email || '',
         role: selectedRole,
         whatsapp: whatsapp,
@@ -296,7 +296,7 @@ export default function App() {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-        <p className="text-sm text-slate-500 mt-4 font-sans">Menyambung ke KomisenHub...</p>
+        <p className="text-sm text-slate-500 mt-4 font-sans">Menyambung ke REFERRA...</p>
       </div>
     );
   }
@@ -308,13 +308,13 @@ export default function App() {
         <div className="max-w-xl w-full bg-white rounded-3xl p-8 border border-slate-100 shadow-xl">
           <div className="text-center mb-8">
             <span className="w-12 h-12 bg-blue-600 text-white font-bold text-2xl flex items-center justify-center rounded-2xl mx-auto mb-4">
-              K
+              R
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold font-sans text-slate-900">
               Langkah Terakhir!
             </h2>
             <p className="text-sm text-slate-500 mt-1">
-              Sila pilih peranan anda di KomisenHub untuk meneruskan pendaftaran.
+              Sila pilih peranan anda di REFERRA untuk meneruskan pendaftaran.
             </p>
           </div>
 

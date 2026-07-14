@@ -1,6 +1,6 @@
 {
-  "name": "KomisyenHub",
-  "description": "Marketplace menghubungkan pemilik perniagaan dengan ejen affiliate komisyen di Malaysia.",
+  "name": "REFERRA | ReferralHub",
+  "description": "Where network meets opportunity",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

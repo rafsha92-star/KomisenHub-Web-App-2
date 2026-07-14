@@ -652,7 +652,7 @@ export const DashboardAdmin: React.FC<DashboardAdminProps> = ({ onExit, adminEma
                               <img src={offer.productImageUrl} alt={offer.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                             ) : (
                               <div className="flex flex-col items-center justify-center text-slate-700 gap-1 text-center p-4">
-                                <span className="text-[10px] font-black uppercase tracking-wider text-slate-700">KomisyenHub</span>
+                                <span className="text-[10px] font-black uppercase tracking-wider text-slate-700">REFERRA</span>
                               </div>
                             )}
                             <span className={`absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[8px] font-extrabold uppercase tracking-widest ${

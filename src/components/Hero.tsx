@@ -18,8 +18,8 @@ export const Hero: React.FC<HeroProps> = ({ onLogin, userProfile, onGoDashboard 
 
   const faqItems = [
     {
-      q: "Adakah KomisenHub menjejaki klik atau jualan saya?",
-      a: "Tidak. KomisenHub adalah direktori maklumat tawaran sahaja dan bukan platform penjejakan affiliate. Tiada pautan khas (referral links), kuki, atau kod pixel yang dijana atau dijejak oleh sistem ini."
+      q: "Adakah REFERRA menjejaki klik atau jualan saya?",
+      a: "Tidak. REFERRA adalah direktori maklumat tawaran sahaja dan bukan platform penjejakan affiliate. Tiada pautan khas (referral links), kuki, atau kod pixel yang dijana atau dijejak oleh sistem ini."
     },
     {
       q: "Bagaimanakah cara ejen affiliate memulakan kerjasama?",
@@ -27,10 +27,10 @@ export const Hero: React.FC<HeroProps> = ({ onLogin, userProfile, onGoDashboard 
     },
     {
       q: "Bagaimanakah pembayaran komisen dilakukan?",
-      a: "Semua pembayaran komisen diuruskan dan dibayar terus oleh pemilik perniagaan kepada ejen affiliate di luar platform KomisenHub mengikut persetujuan peribadi antara kedua-dua pihak."
+      a: "Semua pembayaran komisen diuruskan dan dibayar terus oleh pemilik perniagaan kepada ejen affiliate di luar platform REFERRA mengikut persetujuan peribadi antara kedua-dua pihak."
     },
     {
-      q: "Berapakah kos untuk menggunakan KomisenHub?",
+      q: "Berapakah kos untuk menggunakan REFERRA?",
       a: "Platform ini adalah 100% percuma untuk digunakan oleh pemilik perniagaan bagi menyenaraikan tawaran mereka, dan juga percuma untuk ejen affiliate yang ingin mencari peluang pendapatan."
     },
     {
@@ -46,13 +46,13 @@ export const Hero: React.FC<HeroProps> = ({ onLogin, userProfile, onGoDashboard 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 tracking-wide uppercase mb-6 border border-blue-100">
-              Direktori Tawaran Komisen Sulit Malaysia
+              Where network meets opportunity
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-bold text-slate-900 tracking-tight leading-tight mb-6">
               Hubungkan Produk Anda Dengan <span className="text-blue-600">Ejen Affiliate</span> Secara Terus
             </h1>
             <p className="text-base sm:text-lg text-slate-600 font-sans leading-relaxed mb-10">
-              KomisenHub ialah direktori tertutup (private marketplace) bertulis untuk pemilik perniagaan berkongsi tawaran komisen mereka. Tiada pautan tracking, tiada pengiraan klik automatis—ejen berhubung terus dengan pemilik di luar sistem.
+              REFERRA ialah direktori tertutup (private marketplace) bertulis untuk pemilik perniagaan berkongsi tawaran komisen mereka. Tiada pautan tracking, tiada pengiraan klik automatis—ejen berhubung terus dengan pemilik di luar sistem.
             </p>
  
             {userProfile ? (
@@ -189,7 +189,7 @@ export const Hero: React.FC<HeroProps> = ({ onLogin, userProfile, onGoDashboard 
             Polisi Tiada Penjejakan & Komisen Bebas Luar Sistem
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            KomisenHub **bukan** sebuah sistem penjejakan jualan affiliate. Kami tidak menjana pautan rujukan khas, tidak menjejaki klik, dan tidak memproses bayaran komisen. Seluruh proses pengiklanan, pembuktian jualan, dan pembayaran diuruskan secara peribadi (1-to-1) oleh pemilik perniagaan dan ejen di luar platform kami.
+            REFERRA **bukan** sebuah sistem penjejakan jualan affiliate. Kami tidak menjana pautan rujukan khas, tidak menjejaki klik, dan tidak memproses bayaran komisen. Seluruh proses pengiklanan, pembuktian jualan, dan pembayaran diuruskan secara peribadi (1-to-1) oleh pemilik perniagaan dan ejen di luar platform kami.
           </p>
         </div>
       </div>
@@ -256,7 +256,7 @@ export const Hero: React.FC<HeroProps> = ({ onLogin, userProfile, onGoDashboard 
             <h2 className="text-3xl font-sans font-bold text-slate-900 tracking-tight mt-3">
               Soalan Lazim (FAQ)
             </h2>
-            <p className="text-slate-500 mt-2">Dapatkan jawapan segera kepada persoalan anda berkenaan KomisenHub</p>
+            <p className="text-slate-500 mt-2">Dapatkan jawapan segera kepada persoalan anda berkenaan REFERRA</p>
           </div>
 
           <div className="space-y-4">

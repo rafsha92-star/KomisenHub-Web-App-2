@@ -176,7 +176,7 @@ export const DashboardAffiliate: React.FC<DashboardAffiliateProps> = ({ userProf
   // Prefilled WhatsApp link
   const getWhatsAppLink = (offer: Offer) => {
     const cleanNum = (offer.ownerWhatsapp || '').replace(/[^0-9]/g, '');
-    const text = encodeURIComponent(`Halo ${offer.ownerName}, saya melihat tawaran komisen anda di KomisenHub ("${offer.title}") dan berminat untuk bekerjasama. Boleh kita bincangkan lebih lanjut?`);
+    const text = encodeURIComponent(`Halo ${offer.ownerName}, saya melihat tawaran komisen anda di REFERRA ("${offer.title}") dan berminat untuk bekerjasama. Boleh kita bincangkan lebih lanjut?`);
     return `https://wa.me/${cleanNum}?text=${text}`;
   };
 
@@ -210,10 +210,10 @@ export const DashboardAffiliate: React.FC<DashboardAffiliateProps> = ({ userProf
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-extrabold tracking-tight text-slate-900 block">
-                  Komisen<span className="text-blue-600">Hub</span>
+                <span className="text-lg font-black tracking-tight text-slate-900 block">
+                  REFERRA
                 </span>
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Private Directory</span>
+                <span className="text-[8px] font-sans font-bold text-slate-400 uppercase tracking-wide block">ReferralHub</span>
               </div>
             </div>
 
@@ -936,7 +936,7 @@ export const DashboardAffiliate: React.FC<DashboardAffiliateProps> = ({ userProf
                               ) : (
                                 <div className="flex flex-col items-center justify-center text-slate-300 gap-1.5 text-center p-6">
                                   <ImageIcon className="w-8 h-8 text-slate-400 stroke-[1.5]" />
-                                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">KomisenHub</span>
+                                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">REFERRA</span>
                                 </div>
                               )}
                               <button
@@ -1152,7 +1152,7 @@ export const DashboardAffiliate: React.FC<DashboardAffiliateProps> = ({ userProf
                 <div className="bg-white border border-slate-200 rounded-2xl p-5">
                   <h3 className="font-bold text-slate-800 text-xs">Bagaimana jika pemilik perniagaan tidak membayar komisen?</h3>
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    KomisenHub ialah platform maklumat direktori bertulis sahaja. Kami tiada penglibatan undang-undang atau kawalan pembayaran di luar sistem. Oleh itu, kami amat mengesyorkan agar bekerjasama dengan pemilik perniagaan yang mempunyai rekod prestasi bereputasi tinggi atau bersetuju dengan tempoh bayaran yang singkat (seperti bayaran mingguan).
+                    REFERRA ialah platform maklumat direktori bertulis sahaja. Kami tiada penglibatan undang-undang atau kawalan pembayaran di luar sistem. Oleh itu, kami amat mengesyorkan agar bekerjasama dengan pemilik perniagaan yang mempunyai rekod prestasi bereputasi tinggi atau bersetuju dengan tempoh bayaran yang singkat (seperti bayaran mingguan).
                   </p>
                 </div>
               </div>
@@ -1244,7 +1244,7 @@ export const DashboardAffiliate: React.FC<DashboardAffiliateProps> = ({ userProf
 
                 {contactingOffer.ownerEmail ? (
                   <a
-                    href={`mailto:${contactingOffer.ownerEmail}?subject=Kerjasama KomisenHub: ${encodeURIComponent(contactingOffer.title)}`}
+                    href={`mailto:${contactingOffer.ownerEmail}?subject=Kerjasama REFERRA: ${encodeURIComponent(contactingOffer.title)}`}
                     className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-xl border border-blue-100 transition-all font-semibold text-xs gap-2"
                   >
                     <span className="flex items-center gap-2">

@@ -338,10 +338,10 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-extrabold tracking-tight text-slate-900 block">
-                  Komisen<span className="text-blue-600">Hub</span>
+                <span className="text-lg font-black tracking-tight text-slate-900 block">
+                  REFERRA
                 </span>
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Private Directory</span>
+                <span className="text-[8px] font-sans font-bold text-slate-400 uppercase tracking-wide block">ReferralHub</span>
               </div>
             </div>
 
@@ -912,7 +912,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
                             ) : (
                               <div className="flex flex-col items-center justify-center text-slate-300 gap-1.5 text-center p-6">
                                 <ImageIcon className="w-8 h-8 text-slate-400 stroke-[1.5]" />
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">KomisenHub</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">REFERRA</span>
                               </div>
                             )}
                             <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider shadow-md backdrop-blur-xs ${
@@ -1011,7 +1011,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
           {activeSection === 'help' && (
             <div className="space-y-6 max-w-3xl">
               <div>
-                <h2 className="text-xl font-black text-slate-900 tracking-tight">Pusat Bantuan & Panduan KomisenHub</h2>
+                <h2 className="text-xl font-black text-slate-900 tracking-tight">Pusat Bantuan & Panduan REFERRA</h2>
                 <p className="text-xs text-slate-500 mt-1">Sokongan maklumat untuk melancarkan urusan perkongsian komisen perniagaan.</p>
               </div>
 
@@ -1019,7 +1019,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
                 <div className="bg-white border border-slate-200 rounded-2xl p-5">
                   <h3 className="font-bold text-slate-800 text-sm">Bagaimanakah penjejakan (tracking) dilakukan?</h3>
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    KomisenHub ialah direktori tertutup bertulis sahaja. Kami tiada pautan tracking, tiada pengiraan klik automatik mahupun sistem integrasi pixel. Semuanya berlaku di luar platform. Anda dan ejen bersetuju menggunakan mekanisme manual (contohnya kod promo unik, borang google, borang pengesahan WhatsApp, atau pautan affiliate e-dagang sedia ada anda).
+                    REFERRA ialah direktori tertutup bertulis sahaja. Kami tiada pautan tracking, tiada pengiraan klik automatik mahupun sistem integrasi pixel. Semuanya berlaku di luar platform. Anda dan ejen bersetuju menggunakan mekanisme manual (contohnya kod promo unik, borang google, borang pengesahan WhatsApp, atau pautan affiliate e-dagang sedia ada anda).
                   </p>
                 </div>
 

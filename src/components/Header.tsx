@@ -37,10 +37,10 @@ export const Header: React.FC<HeaderProps> = ({ userProfile, onLogin, onLogout, 
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
               </div>
               <div>
-                <span className="text-2xl font-bold tracking-tight text-blue-900">
-                  Komisen<span className="text-blue-600">Hub</span>
+                <span className="text-2xl font-black tracking-tight text-blue-900">
+                  REFERRA
                 </span>
-                <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">MARKETPLACE KOMISEN MALAYSIA</p>
+                <p className="text-[9px] font-sans font-bold text-slate-400 uppercase tracking-wider">Where network meets opportunity</p>
               </div>
             </div>
 
