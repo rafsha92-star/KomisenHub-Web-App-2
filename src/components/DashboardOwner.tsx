@@ -22,9 +22,15 @@ interface DashboardOwnerProps {
   userProfile: UserProfile;
   onToggleRole?: () => void;
   onLogout?: () => void;
+  onShowStatus: (type: 'loading' | 'success' | 'error', title: string, message: string, autoCloseMs?: number) => void;
 }
 
-export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onToggleRole, onLogout }) => {
+export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ 
+  userProfile, 
+  onToggleRole, 
+  onLogout,
+  onShowStatus
+}) => {
   // State management
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loadingOffers, setLoadingOffers] = useState(true);
@@ -215,6 +221,12 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
     setSubmittingOffer(true);
     setErrorMsg('');
 
+    if (editingOfferId) {
+      onShowStatus('loading', 'Mengemas Kini Tawaran...', 'Sila tunggu sebentar, maklumat tawaran anda sedang disimpan...');
+    } else {
+      onShowStatus('loading', 'Menyimpan Tawaran Baru...', 'Sila tunggu sebentar, tawaran komisen anda sedang didaftarkan...');
+    }
+
     const path = 'offers';
     try {
       if (editingOfferId) {
@@ -233,6 +245,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
           updatedAt: serverTimestamp(),
         });
         setEditingOfferId(null);
+        onShowStatus('success', 'Tawaran Dikemaskini!', 'Maklumat tawaran anda telah dikemaskini dengan selamat.', 2500);
       } else {
         const newOfferData = {
           ownerId: userProfile.uid,
@@ -254,6 +267,7 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
         };
 
         await addDoc(collection(db, path), newOfferData);
+        onShowStatus('success', 'Tawaran Berjaya Dicipta!', 'Tawaran baru anda kini aktif dalam direktori REFERRA.', 2500);
       }
 
       setTitle('');
@@ -266,9 +280,11 @@ export const DashboardOwner: React.FC<DashboardOwnerProps> = ({ userProfile, onT
       setCommissionAmount(10);
       setCategory('Servis');
       setActiveSection('offers');
-    } catch (error) {
+    } catch (error: any) {
       handleFirestoreError(error, editingOfferId ? OperationType.UPDATE : OperationType.CREATE, path);
-      setErrorMsg(editingOfferId ? 'Ralat ketika mengemas kini tawaran.' : 'Ralat ketika menyimpan tawaran baru.');
+      const errMsg = editingOfferId ? 'Ralat ketika mengemas kini tawaran.' : 'Ralat ketika menyimpan tawaran baru.';
+      setErrorMsg(errMsg);
+      onShowStatus('error', 'Gagal Menyimpan Tawaran', errMsg + ' ' + (error.message || 'Sila cuba lagi.'));
     } finally {
       setSubmittingOffer(false);
     }

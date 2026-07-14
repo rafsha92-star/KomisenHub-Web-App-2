@@ -19,9 +19,17 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   preferredRole: UserRole | null;
+  onShowStatus: (type: 'loading' | 'success' | 'error', title: string, message: string, autoCloseMs?: number) => void;
+  onCloseStatus: () => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferredRole }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ 
+  isOpen, 
+  onClose, 
+  preferredRole,
+  onShowStatus,
+  onCloseStatus
+}) => {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -50,6 +58,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
       return;
     }
 
+    if (isRegisterMode) {
+      onShowStatus('loading', 'Mendaftar Akaun Baru...', 'Sila tunggu sebentar sementara kami mencipta akaun anda...');
+    } else {
+      onShowStatus('loading', 'Sedang Log Masuk...', 'Sila tunggu sebentar sementara kami mengesahkan maklumat anda...');
+    }
+
     try {
       if (isRegisterMode) {
         // Store whatsapp temporarily in localStorage so App.tsx can retrieve it when creating profile
@@ -63,38 +77,43 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
             displayName: fullName.trim()
           });
         }
+        onShowStatus('success', 'Pendaftaran Berjaya!', 'Akaun anda telah berjaya didaftarkan. Selamat datang!', 2000);
       } else {
         // Sign in with email and password
         await signInWithEmailAndPassword(auth, email, password);
+        onShowStatus('success', 'Log Masuk Berjaya!', 'Selamat kembali! Membuka papan pemuka anda...', 2000);
       }
       onClose(); // Close modal upon successful authentication
     } catch (error: any) {
       console.warn('Authentication scenario:', error);
+      let friendlyError = '';
       // Friendly Melayu errors
       switch (error.code) {
         case 'auth/email-already-in-use':
-          setErrorMsg('E-mel ini telah digunakan oleh akaun lain.');
+          friendlyError = 'E-mel ini telah digunakan oleh akaun lain.';
           break;
         case 'auth/invalid-email':
-          setErrorMsg('Format alamat e-mel tidak sah.');
+          friendlyError = 'Format alamat e-mel tidak sah.';
           break;
         case 'auth/weak-password':
-          setErrorMsg('Kata laluan terlalu lemah. Sila gunakan sekurang-kurangnya 6 aksara.');
+          friendlyError = 'Kata laluan terlalu lemah. Sila gunakan sekurang-kurangnya 6 aksara.';
           break;
         case 'auth/wrong-password':
         case 'auth/user-not-found':
         case 'auth/invalid-credential':
-          setErrorMsg('E-mel atau kata laluan salah.');
+          friendlyError = 'E-mel atau kata laluan salah.';
           break;
         case 'auth/popup-closed-by-user':
-          setErrorMsg('Tetingkap log masuk Google ditutup sebelum selesai.');
+          friendlyError = 'Tetingkap log masuk Google ditutup sebelum selesai.';
           break;
         case 'auth/operation-not-allowed':
-          setErrorMsg('Ralat: Kaedah daftar/masuk menggunakan E-mel & Kata Laluan tidak diaktifkan di Firebase Console anda. Sila pergi ke Firebase Console > Authentication > Sign-in method, aktifkan "Email/Password" untuk membenarkan pendaftaran ini.');
+          friendlyError = 'Ralat: Kaedah daftar/masuk menggunakan E-mel & Kata Laluan tidak diaktifkan di Firebase Console anda. Sila pergi ke Firebase Console > Authentication > Sign-in method, aktifkan "Email/Password" untuk membenarkan pendaftaran ini.';
           break;
         default:
-          setErrorMsg(error.message || 'Ralat sistem berlaku. Sila cuba lagi.');
+          friendlyError = error.message || 'Ralat sistem berlaku. Sila cuba lagi.';
       }
+      setErrorMsg(friendlyError);
+      onShowStatus('error', isRegisterMode ? 'Pendaftaran Gagal' : 'Log Masuk Gagal', friendlyError);
     } finally {
       setLoading(false);
     }
@@ -104,23 +123,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, preferred
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setLoading(true);
+    onShowStatus('loading', 'Menghubungkan ke Google...', 'Sila sahkan akaun anda di tetingkap yang dibuka...');
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
+      onShowStatus('success', 'Log Masuk Google Berjaya!', 'Selamat kembali! Membuka papan pemuka anda...', 2000);
       onClose();
     } catch (error: any) {
       console.warn('Google Auth Error:', error);
+      let friendlyError = '';
       if (error.code === 'auth/popup-closed-by-user') {
-        setErrorMsg('Tetingkap log masuk Google ditutup sebelum selesai. Sekiranya ini berlaku secara automatik, pelayar web anda mungkin menyekat pop-up di dalam iframe. Sila gunakan daftar/masuk menggunakan E-mel di bawah atau buka aplikasi ini di tab baru (Open in new tab).');
+        friendlyError = 'Tetingkap log masuk Google ditutup sebelum selesai. Sekiranya ini berlaku secara automatik, pelayar web anda mungkin menyekat pop-up di dalam iframe. Sila gunakan daftar/masuk menggunakan E-mel di bawah atau buka aplikasi ini di tab baru (Open in new tab).';
       } else if (error.code === 'auth/popup-blocked') {
-        setErrorMsg('Pop-up disekat oleh pelayar web anda. Sila benarkan pop-up untuk laman web ini, gunakan daftar/masuk menggunakan E-mel, atau buka aplikasi ini di tab baru.');
+        friendlyError = 'Pop-up disekat oleh pelayar web anda. Sila benarkan pop-up untuk laman web ini, gunakan daftar/masuk menggunakan E-mel, atau buka aplikasi ini di tab baru.';
       } else if (error.code === 'auth/unauthorized-domain') {
-        setErrorMsg(`Domain ini (${window.location.hostname}) belum didaftarkan di Firebase Console. Sila tambah "${window.location.hostname}" ke dalam senarai "Authorized domains" di Firebase Console (Authentication > Settings > Authorized domains) untuk membenarkan log masuk di Netlify.`);
+        friendlyError = `Domain ini (${window.location.hostname}) belum didaftarkan di Firebase Console. Sila tambah "${window.location.hostname}" ke dalam senarai "Authorized domains" di Firebase Console (Authentication > Settings > Authorized domains) untuk membenarkan log masuk di Netlify.`;
       } else if (error.code === 'auth/operation-not-allowed') {
-        setErrorMsg('Ralat: Kaedah daftar/masuk menggunakan Google tidak diaktifkan di Firebase Console anda. Sila pergi ke Firebase Console > Authentication > Sign-in method, klik "Add new provider", pilih "Google", aktifkan dan simpan.');
+        friendlyError = 'Ralat: Kaedah daftar/masuk menggunakan Google tidak diaktifkan di Firebase Console anda. Sila pergi ke Firebase Console > Authentication > Sign-in method, klik "Add new provider", pilih "Google", aktifkan dan simpan.';
       } else {
-        setErrorMsg(`Gagal menyambung ke Google (${error.code || error.message}). Sekiranya anda di Netlify, pastikan anda telah menambah domain "${window.location.hostname}" ke senarai Authorized Domains di Firebase Console.`);
+        friendlyError = `Gagal menyambung ke Google (${error.code || error.message}). Sekiranya anda di Netlify, pastikan anda telah menambah domain "${window.location.hostname}" ke senarai Authorized Domains di Firebase Console.`;
       }
+      setErrorMsg(friendlyError);
+      onShowStatus('error', 'Log Masuk Google Gagal', friendlyError);
     } finally {
       setLoading(false);
     }

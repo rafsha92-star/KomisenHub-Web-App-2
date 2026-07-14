@@ -32,6 +32,7 @@ import { DashboardAffiliate } from './components/DashboardAffiliate';
 import { DashboardAdmin } from './components/DashboardAdmin';
 import { Footer } from './components/Footer';
 import { AuthModal } from './components/AuthModal';
+import { StatusOverlay, StatusType } from './components/StatusOverlay';
 import { 
   Briefcase, Users, Loader2, ArrowRight, ShieldCheck, 
   AlertCircle, Smartphone, ExternalLink 
@@ -43,6 +44,43 @@ export default function App() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'dashboard' | 'home'>('dashboard');
+
+  // Status Overlay states
+  const [statusOverlay, setStatusOverlay] = useState<{
+    isOpen: boolean;
+    type: 'loading' | 'success' | 'error';
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: 'loading',
+    title: '',
+    message: '',
+  });
+
+  const showStatus = (type: 'loading' | 'success' | 'error', title: string, message: string, autoCloseMs?: number) => {
+    setStatusOverlay({
+      isOpen: true,
+      type,
+      title,
+      message,
+    });
+
+    if (autoCloseMs && (type === 'success' || type === 'error')) {
+      setTimeout(() => {
+        setStatusOverlay(prev => {
+          if (prev.type === type && prev.title === title) {
+            return { ...prev, isOpen: false };
+          }
+          return prev;
+        });
+      }, autoCloseMs);
+    }
+  };
+
+  const closeStatus = () => {
+    setStatusOverlay(prev => ({ ...prev, isOpen: false }));
+  };
 
   // Role setup state (for first-time login)
   const [showRoleSelection, setShowRoleSelection] = useState(false);
@@ -208,12 +246,15 @@ export default function App() {
 
   // 4. Handle logout action
   const handleLogout = async () => {
+    showStatus('loading', 'Sedang Log Keluar...', 'Sila tunggu sebentar sementara kami menamatkan sesi anda...');
     try {
       await signOut(auth);
       setProfile(null);
       setUser(null);
-    } catch (error) {
+      showStatus('success', 'Log Keluar Berjaya!', 'Terima kasih kerana menggunakan REFERRA. Jumpa lagi!', 2000);
+    } catch (error: any) {
       console.error('Logout error:', error);
+      showStatus('error', 'Gagal Log Keluar', error.message || 'Sila cuba lagi.');
     }
   };
 
@@ -228,6 +269,7 @@ export default function App() {
 
     setSavingProfile(true);
     setProfileError('');
+    showStatus('loading', 'Menetapkan Profil Anda...', 'Sila tunggu sebentar sementara kami mendaftarkan akaun anda...');
     const path = `users/${user.uid}`;
 
     try {
@@ -257,9 +299,11 @@ export default function App() {
       setProfile(newProfile);
       setViewMode('dashboard');
       setShowRoleSelection(false);
-    } catch (error) {
+      showStatus('success', 'Akaun Sedia Digunakan!', 'Pendaftaran peranan anda telah berjaya! Selamat meneroka.', 2500);
+    } catch (error: any) {
       handleFirestoreError(error, OperationType.CREATE, path);
       setProfileError('Gagal melengkapkan pendaftaran profil.');
+      showStatus('error', 'Pendaftaran Profil Gagal', 'Gagal melengkapkan maklumat profil anda. ' + (error.message || 'Sila cuba lagi.'));
     } finally {
       setSavingProfile(false);
     }
@@ -425,7 +469,12 @@ export default function App() {
         <main className={isDashboardActive ? "flex-grow h-full overflow-hidden flex" : "flex-grow"}>
           {isDashboardActive ? (
             profile.role === UserRole.OWNER ? (
-              <DashboardOwner userProfile={profile} onToggleRole={handleToggleRole} onLogout={handleLogout} />
+              <DashboardOwner 
+                userProfile={profile} 
+                onToggleRole={handleToggleRole} 
+                onLogout={handleLogout} 
+                onShowStatus={showStatus}
+              />
             ) : (
               <DashboardAffiliate userProfile={profile} onToggleRole={handleToggleRole} onLogout={handleLogout} />
             )
@@ -447,6 +496,17 @@ export default function App() {
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
         preferredRole={preferredRole} 
+        onShowStatus={showStatus}
+        onCloseStatus={closeStatus}
+      />
+
+      {/* Global Status Overlay */}
+      <StatusOverlay
+        isOpen={statusOverlay.isOpen}
+        type={statusOverlay.type}
+        title={statusOverlay.title}
+        message={statusOverlay.message}
+        onClose={closeStatus}
       />
     </div>
   );
